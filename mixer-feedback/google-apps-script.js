@@ -3,7 +3,8 @@ function doPost(e) {
     lock.tryLock(10000);
 
     try {
-        var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+        // Use openById to ensure we connect to the correct sheet even if the script is standalone
+        var sheet = SpreadsheetApp.openById("18dlXrMzdWa_-ArmJ5ODcB2UxhZZjFeY6x-QBnbzbTxI").getActiveSheet();
 
         // Parse the incoming JSON data
         var data = JSON.parse(e.postData.contents);

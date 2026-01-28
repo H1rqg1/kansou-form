@@ -235,7 +235,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     showSuccess();
                 } else {
                     // Other error
-                    alert("送信エラーが発生しました。");
+                    // Other error
+                    console.error("Server Error:", response);
+                    alert("送信エラーが発生しました。\n詳細: " + JSON.stringify(response));
                     submitBtn.classList.remove('loading');
                     submitBtn.disabled = false;
                 }
