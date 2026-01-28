@@ -76,10 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ========== Admin Mode Logic ==========
     const ADMIN_PASSWORD = "IPUTEXCOiecZ1MKK";
+    const SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/18dlXrMzdWa_-ArmJ5ODcB2UxhZZjFeY6x-QBnbzbTxI/edit?usp=sharing";
     const MAX_ATTEMPTS = 3;
     let attemptCount = 0;
     let isLocked = false;
-    let isAdminMode = false;
+    // let isAdminMode = false; // Admin mode state is no longer needed for UI changes
 
     const adminBtn = document.getElementById('adminBtn');
     const adminModal = document.getElementById('adminModal');
@@ -96,11 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Open admin modal
     adminBtn.addEventListener('click', () => {
-        if (isAdminMode) {
-            // Already in admin mode - exit
-            exitAdminMode();
-            return;
-        }
+        // Always open modal to ask for password (or show lock)
+        // No toggle logic needed since we don't stay in "Admin Mode"
 
         if (isLocked) {
             adminModalMessage.textContent = "ロックされています";
@@ -140,9 +138,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (inputPassword === ADMIN_PASSWORD) {
             // Success
-            enterAdminMode();
+            window.open(SPREADSHEET_URL, '_blank');
             adminModal.classList.remove('show');
             attemptCount = 0;
+            adminPassword.value = ""; // Clear password
         } else {
             // Wrong password
             attemptCount++;
@@ -166,36 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function enterAdminMode() {
-        isAdminMode = true;
-        adminBtn.classList.add('active');
-
-        // Add banner
-        const banner = document.createElement('div');
-        banner.id = 'adminBanner';
-        banner.className = 'admin-mode-banner';
-        banner.innerHTML = '<i class="fa-solid fa-shield-halved"></i> 管理者モード - 再送信が可能です';
-        document.body.prepend(banner);
-        document.body.classList.add('admin-mode');
-
-        // Remove submitted flag to allow resubmission
-        localStorage.removeItem('mixer_feedback_submitted');
-
-        // Reload form if it was showing "submitted" message
-        const formContainer = document.querySelector('.glass-card');
-        if (formContainer.querySelector('.submitted-message')) {
-            location.reload();
-        }
-    }
-
-    function exitAdminMode() {
-        isAdminMode = false;
-        adminBtn.classList.remove('active');
-
-        const banner = document.getElementById('adminBanner');
-        if (banner) banner.remove();
-        document.body.classList.remove('admin-mode');
-    }
+    // enterAdminMode and exitAdminMode functions are removed as they are no longer needed
 
     // Cancel admin modal
     adminCancelBtn.addEventListener('click', () => {
@@ -211,18 +181,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ========== End of Admin Mode Logic ==========
 
-    // Check if already submitted
-    if (localStorage.getItem('mixer_feedback_submitted')) {
-        const formContainer = document.querySelector('.glass-card');
-        formContainer.innerHTML = `
-            <div class="submitted-message" style="text-align: center; padding: 2rem;">
-                <i class="fa-solid fa-check-circle" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
-                <h2>回答済みです</h2>
-                <p>アンケートへのご協力ありがとうございました。</p>
-            </div>
-        `;
-        return;
-    }
+    // Check if already submitted - REMOVED to allow multiple submissions
+    // if (localStorage.getItem('mixer_feedback_submitted')) { ... }
 
     // Form Submission Logic
     const form = document.getElementById('feedbackForm');
@@ -270,8 +230,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json()) // Now we can parse the JSON!
             .then(response => {
                 if (response.result === "success") {
-                    // Mark as submitted locally
-                    localStorage.setItem('mixer_feedback_submitted', 'true');
+                    // Success
+                    // localStorage.setItem('mixer_feedback_submitted', 'true'); // Don't block future submissions
                     showSuccess();
                 } else {
                     // Other error
