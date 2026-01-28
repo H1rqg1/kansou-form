@@ -38,8 +38,9 @@ function doPost(e) {
             .setMimeType(ContentService.MimeType.JSON);
 
     } catch (e) {
+        var errorMsg = e.toString();
         return ContentService
-            .createTextOutput(JSON.stringify({ "result": "error", "error": e }))
+            .createTextOutput(JSON.stringify({ "result": "error", "error": errorMsg }))
             .setMimeType(ContentService.MimeType.JSON);
     } finally {
         lock.releaseLock();

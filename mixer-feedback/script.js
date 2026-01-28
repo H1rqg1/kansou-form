@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // REPLACE THIS WITH YOUR DEPLOYED GOOGLE APPS SCRIPT URL
     // 例: https://script.google.com/macros/s/AKfycbx.../exec
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvA7wzbznnrW5nAH90TYQfmzZqrKXJaOKL6GfJpqBE-oSDqPSnv89XOIjFTuC7HdjkCg/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrSvGZSK0J3th8pKHr6j2uDtdXuAu3am0uyw1U-HmEIdowrEaEQFS7X_RbZO_xdDM9IA/exec";
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
