@@ -25,6 +25,8 @@ function doPost(e) {
             data.name,
             "-", // Student ID is removed from form
             deptName,
+            data.seniorName || "",
+            data.friendName || "",
             data.satisfaction,
             data.bestPart,
             data.message
@@ -49,7 +51,7 @@ function doPost(e) {
 
 function setupSheet() {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    var headers = ["タイムスタンプ", "お名前", "学籍番号", "学科", "満足度", "印象に残ったこと", "メッセージ"];
+    var headers = ["タイムスタンプ", "お名前", "学籍番号", "学科", "仲良くなった先輩", "仲良くなった友達", "満足度", "印象に残ったこと", "メッセージ"];
     if (sheet.getLastRow() === 0) {
         sheet.appendRow(headers);
         sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
